@@ -11,9 +11,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppBarTab = ({ text, linkDestination }) => {
+const AppBarTab = ({ text, linkDestination, handlePress }) => {
   return (
-    <Link to={linkDestination}>
+    <Link to={linkDestination} onPress={handlePress}>
       <Text style={styles.text}>{text}</Text>
     </Link>
   );
