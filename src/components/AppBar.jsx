@@ -1,6 +1,6 @@
 import React from 'react';
-import { useQuery, ApolloClient, useApolloClient } from '@apollo/client';
-import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { useQuery, useApolloClient } from '@apollo/client';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 
 import theme from '../theme';
@@ -26,13 +26,22 @@ const AppBar = () => {
   const { loading, error, data } = useQuery(AUTHORIZED_USER);
   const authStorage = useAuthStorage();
   const client = useApolloClient();
- 
-  console.log(data.authorizedUser);
+
+  const handleLogout = () => {
+    if (data && data.authorizedUser) {
+      authStorage.removeAccessToken();
+      client.resetStore();
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.flexContainer} horizontal>
         <AppBarTab text='Repositories' linkDestination='/' />
-        <AppBarTab text='Log in' linkDestination='/signin' />
+        {data && data.authorizedUser
+          ? <AppBarTab text='Log out' linkDestination='/signin' handlePress={handleLogout} />
+          : <AppBarTab text='Log in' linkDestination='/signin' />
+        }
       </ScrollView>
     </View>
   );
