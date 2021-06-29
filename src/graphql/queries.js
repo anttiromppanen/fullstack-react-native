@@ -3,12 +3,16 @@ import { gql } from '@apollo/client';
 export const GET_REPOSITORIES = gql`
   query getRepositories(
     $orderBy: AllRepositoriesOrderBy,
-    $orderDirection: OrderDirection
-    $searchKeyword: String) {
+    $orderDirection: OrderDirection,
+    $searchKeyword: String,
+    $first: Int,
+    $after: String) {
     repositories(
       orderBy: $orderBy,
-      orderDirection: $orderDirection
-      searchKeyword: $searchKeyword) {
+      orderDirection: $orderDirection,
+      searchKeyword: $searchKeyword,
+      first: $first,
+      after: $after) {
       edges {
         node {
           id,
@@ -21,6 +25,12 @@ export const GET_REPOSITORIES = gql`
           reviewCount,
           ratingAverage
         }
+        cursor
+      }
+      pageInfo {
+        endCursor,
+        startCursor,
+        hasNextPage
       }
     }
   }
@@ -47,16 +57,30 @@ export const SEARCH_REPOSITORIES = gql`
 `;
 
 export const AUTHORIZED_USER = gql`
-  query {
+  query getAuthorizedUser($includeReviews: Boolean = false) {
     authorizedUser {
       id
       username
+      reviews @include(if: $includeReviews) {
+        edges {
+          node {
+            id
+            rating
+            createdAt
+            text
+            repository {
+              fullName
+              url
+            }
+          }
+        }
+      }
     }
   }
 `;
 
 export const GET_REPOSITORY = gql`
-  query getRepository($id: ID!) {
+  query getRepository($id: ID!, $first: Int, $after: String) {
     repository(id: $id) {
       id
       ownerName
@@ -71,7 +95,7 @@ export const GET_REPOSITORY = gql`
       ownerAvatarUrl
       description
       language
-      reviews {
+      reviews(first: $first, after: $after) {
         edges {
           node {
             id
@@ -83,6 +107,12 @@ export const GET_REPOSITORY = gql`
               username
             }
           }
+          cursor
+        }
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
         }
       }
     }

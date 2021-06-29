@@ -28,8 +28,8 @@ export class RepositoryListContainer extends React.Component {
   };
 
   render() {
-    const repositoryNodes = this.props.data
-      ? this.props.data.repositories.edges.map(edge => edge.node)
+    const repositoryNodes = this.props.repositories
+      ? this.props.repositories.edges.map(edge => edge.node)
       : [];
       
     return (
@@ -37,6 +37,8 @@ export class RepositoryListContainer extends React.Component {
         data={repositoryNodes}
         ItemSeparatorComponent={ItemSeparator}
         ListHeaderComponent={this.renderHeader}
+        onEndReached={this.props.onEndReach}
+        onEndReachedThreshold={0.5}
         renderItem={({ item }) => (
           <RepositoryItem item={item} onPress={this.props.handleRepositoryPress} />
         )}
@@ -50,15 +52,22 @@ const RepositoryList = () => {
   const [searchFieldValue, setSearchFieldValue] = useState('');
   const [searchQueryValue] = useDebounce(searchFieldValue, 500);
   const [selectedOrder, setSelectedOrder] = useState('CREATED_AT');
-  const data = useRepositories(selectedOrder, searchQueryValue);
+  const { repositories, fetchMore } = useRepositories(
+    selectedOrder,
+    searchQueryValue,
+    10,
+  );
 
   const handleRepositoryPress = (id) => {
     history.push(`/repository/${id}`);
   };
 
+  const onEndReach = () => fetchMore();
+  
   return (
     <RepositoryListContainer
-      data={data}
+      repositories={repositories}
+      onEndReach={onEndReach}
       selectedOrder={selectedOrder}
       setSelectedOrder={setSelectedOrder}
       setSearchFieldValue={setSearchFieldValue}

@@ -4,6 +4,7 @@ import { Searchbar } from 'react-native-paper';
 
 const styles = StyleSheet.create({
   searchBar: {
+    borderRadius: 20,
     marginTop: 10,
     marginHorizontal: 15,
   },

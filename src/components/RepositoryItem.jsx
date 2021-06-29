@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     marginTop: 15,
-    borderRadius: theme.borderRadius.semiRound,
+    borderRadius: theme.borderRadius.round,
   },
   horizontalLine: {
     borderBottomColor: theme.colors.appBackgroundColor,

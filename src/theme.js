@@ -8,6 +8,7 @@ const theme = {
     yellow: '#FFC25E',
     lightBrown: '#B6A999',
     errorColor: '#C2554F',
+    lowReviewScoreRed: '#FF734D',
     appBackgroundColor: 'lightgrey',
     appBarBackground: '#504538',
     appBarPrimaryTextColor: 'white',
@@ -17,7 +18,7 @@ const theme = {
     body: 14,
     heading: 45,
     subheading: 16,
-    appBarTextSize: 20,
+    appBarTextSize: 16,
   },
   fonts: {
     main: Platform.select({
@@ -31,8 +32,8 @@ const theme = {
     bold: '700',
   },
   borderRadius: {
-    round: 10,
-    semiRound: 5,
+    round: 20,
+    semiRound: 20,
   },
   container: {
     backgroundColor: 'white',
@@ -52,7 +53,7 @@ const theme = {
     marginTop: 10,
     padding: 15,
     backgroundColor: '#00BB82',
-    borderRadius: 5,
+    borderRadius: 20,
   },
   formSubmitButtonText: {
     color: 'white',
@@ -67,7 +68,7 @@ const theme = {
     margin: 5,
     padding: 10,
     borderStyle: 'solid',
-    borderRadius: 5,
+    borderRadius: 20,
     fontSize: 18,
   },
   formIcon: {
