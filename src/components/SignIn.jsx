@@ -2,7 +2,8 @@ import React from 'react';
 import { useHistory } from 'react-router-native';
 import { Formik } from 'formik';
 import FormikTextInput from './FormikTextInput';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View, ImageBackground, StyleSheet } from 'react-native';
+import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import * as yup from 'yup';
 
 import Text from './Text';
@@ -24,41 +25,48 @@ const validationSchema = yup.object().shape({
     .required('Password is required'),
 });
 
+const backgroundImage = { uri: 'https://images.pexels.com/photos/3644742/pexels-photo-3644742.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260' };
+
 const styles = StyleSheet.create({
-  textInput: {
-    margin: 5,
-    padding: 10,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: theme.colors.appBackgroundColor,
-    borderRadius: theme.borderRadius.semiRound,
+  backgroundImage: {
+    height: '100%',
+    width: '100%',
   },
-  signInForm: {
-    backgroundColor: 'white',
-    padding: 10,
-  },
-  submitButton: {
-    margin: 5,
-    padding: 15,
-    backgroundColor: theme.colors.primary,
-    borderRadius: theme.borderRadius.semiRound,
-  },
-  submitButtonText: {
-    color: 'white',
-    textAlign: 'center',
-  },
-  
 });
 
 const SignInForm = ({ onSubmit }) => {
   return (
-    <View style={styles.signInForm}>
-      <FormikTextInput style={styles.textInput}  name="username" placeholder="username" />
-      <FormikTextInput style={styles.textInput} name="password" placeholder="password" secureTextEntry/>
-      <Pressable style={styles.submitButton} onPress={onSubmit}>
-        <Text style={styles.submitButtonText} fontWeight="bold" fontSize="subheading" >SIGN IN</Text>
-      </Pressable>
-    </View>
+    <ImageBackground style={styles.backgroundImage} source={backgroundImage}>
+      <View style={theme.formStyle}>
+        <Text style={theme.formHeadingText} fontSize="heading">Log in</Text>
+        <FormikTextInput
+          style={theme.formTextInput}
+          name="username"
+          placeholder="username"
+          testID="usernameField"
+          icon={faUser}
+        />
+        <FormikTextInput
+          style={theme.formTextInput}
+          name="password"
+          placeholder="password"
+          secureTextEntry
+          testID="passwordField"
+          icon={faLock}
+        />
+        <Pressable
+          style={theme.formSubmitButton}
+          onPress={onSubmit}
+          testID="submitButton">
+          <Text
+            style={theme.formSubmitButtonText}
+            fontWeight="bold"
+            fontSize="subheading">
+            LOG IN
+          </Text>
+        </Pressable>
+      </View>
+    </ImageBackground>
   );
 };
 

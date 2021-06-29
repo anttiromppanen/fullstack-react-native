@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
-import { useQuery } from '@apollo/client';
+import { useHistory } from 'react-router-native';
+import { useDebounce } from 'use-debounce';
 
 import RepositoryItem from './RepositoryItem';
-import { GET_REPOSITORIES } from '../graphql/queries';
+import RepositoryOrderMenu from './RepositoryOrderMenu';
+
+import useRepositories from '../hooks/useRepositories';
 
 const styles = StyleSheet.create({
   separator: {
@@ -13,20 +16,53 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const RepositoryList = () => {
-  const { data, error, loading } = useQuery(GET_REPOSITORIES, {
-    fetchPolicy: 'cache-and-network',
-  });
+export class RepositoryListContainer extends React.Component {
+  renderHeader = () => {
+    return (
+      <RepositoryOrderMenu
+        selectedOrder={this.props.selectedOrder}
+        setSelectedOrder={this.props.setSelectedOrder}
+        setSearchFieldValue={this.props.setSearchFieldValue}
+      />
+    );
+  };
 
-  const repositoryNodes = data
-    ? data.repositories.edges.map(edge => edge.node)
-    : [];
+  render() {
+    const repositoryNodes = this.props.data
+      ? this.props.data.repositories.edges.map(edge => edge.node)
+      : [];
+      
+    return (
+      <FlatList
+        data={repositoryNodes}
+        ItemSeparatorComponent={ItemSeparator}
+        ListHeaderComponent={this.renderHeader}
+        renderItem={({ item }) => (
+          <RepositoryItem item={item} onPress={this.props.handleRepositoryPress} />
+        )}
+      />
+    );
+  }
+}
+
+const RepositoryList = () => {
+  const history = useHistory();
+  const [searchFieldValue, setSearchFieldValue] = useState('');
+  const [searchQueryValue] = useDebounce(searchFieldValue, 500);
+  const [selectedOrder, setSelectedOrder] = useState('CREATED_AT');
+  const data = useRepositories(selectedOrder, searchQueryValue);
+
+  const handleRepositoryPress = (id) => {
+    history.push(`/repository/${id}`);
+  };
 
   return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={RepositoryItem}
+    <RepositoryListContainer
+      data={data}
+      selectedOrder={selectedOrder}
+      setSelectedOrder={setSelectedOrder}
+      setSearchFieldValue={setSearchFieldValue}
+      handleRepositoryPress={handleRepositoryPress}
     />
   );
 };

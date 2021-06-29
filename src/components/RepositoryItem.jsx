@@ -1,5 +1,6 @@
 import React from 'react';
-import { Image, View, StyleSheet } from 'react-native';
+import { Image, View, StyleSheet, Pressable } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
 import { faStar, faUtensils, faSearch, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 import Text from './Text';
@@ -7,24 +8,33 @@ import RepositoryInfo from './RepositoryInfo';
 import theme from '../theme';
 
 const styles = StyleSheet.create({
-  background: {
-    backgroundColor: theme.colors.repositoryItemBackgroundColor,
-    padding: 20,
-  },
   avatar: {
     width: 75,
     height: 75,
-    borderRadius: 10,
+    borderRadius: theme.borderRadius.round,
   },
   languageText: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: '#FFC25E',
     color: 'white',
     padding: 5,
-    borderRadius: 5,
+    borderRadius: theme.borderRadius.semiRound,
   },
+  githubButton: {
+    backgroundColor: theme.colors.primary,
+    padding: 20,
+    alignItems: 'center',
+    marginTop: 15,
+    borderRadius: theme.borderRadius.semiRound,
+  },
+  horizontalLine: {
+    borderBottomColor: theme.colors.appBackgroundColor,
+    borderBottomWidth: 1,
+    marginTop: 20,
+    marginBottom: 5 
+  }
 });
 
-const RepositoryItem = ({ item }) => {
+const RepositoryItem = ({ item, onPress, showGithubButton = false }) => {
   const createAmount = (amount) => {
     if (amount < 1000) return amount;
 
@@ -36,41 +46,71 @@ const RepositoryItem = ({ item }) => {
 
     return newAmount + 'k';
   };
+ 
+  const handleOpenWithWebBrowser = () => {
+    WebBrowser.openBrowserAsync(item.url);
+  };
+
+  const handleRepositoryPress = (id) => onPress && onPress(id);
 
   return (
-    <View style={styles.background}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Image style={styles.avatar} source={{ uri: item.ownerAvatarUrl }} />
-        <View style={{ flexShrink: 1, marginLeft: 10 }}>
-          <Text fontWeight="bold" fontSize="subheading">{item.fullName}</Text>
-          <Text>{item.description}</Text>
+    <View style={theme.container}>
+      <Pressable onPress={() => handleRepositoryPress(item.id)}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Image style={styles.avatar} source={{ uri: item.ownerAvatarUrl }} />
+          <View style={{ flexShrink: 1, marginLeft: 10 }}>
+            <Text
+              fontWeight="bold"
+              fontSize="subheading"
+              testID="repositoryName">
+              {item.fullName}
+            </Text>
+            <Text testID="repositoryDescription">{item.description}</Text>
+          </View>
         </View>
+        </Pressable>
+      <View
+        style={{ alignSelf: 'flex-start', marginVertical: 7 }}>
+        <Text
+          style={styles.languageText}
+          testID="repositoryLanguage">
+          {item.language}
+        </Text>
       </View>
-      <View style={{ alignSelf: 'flex-start', marginVertical: 10 }}>
-        <Text style={styles.languageText}>{item.language}</Text>
-      </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View style={styles.horizontalLine}></View>
+      <View
+        style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <RepositoryInfo
           text="Stars"
           amount={createAmount(item.stargazersCount)}
+          testID="repositoryStargazers"
           icon={faStar}
         />
         <RepositoryInfo
           text="Forks"
           amount={createAmount(item.forksCount)}
+          testID="repositoryForks"
           icon={faUtensils}
         />
         <RepositoryInfo
           text="Reviews" 
           amount={createAmount(item.reviewCount)}
+          testID="repositoryReviews"
           icon={faSearch}
         />
         <RepositoryInfo
           text="Rating"
           amount={createAmount(item.ratingAverage)}
+          testID="repositoryRatings"
           icon={faThumbsUp}
         />
       </View>
+      {
+        showGithubButton &&
+        <Pressable style={styles.githubButton} onPress={handleOpenWithWebBrowser}>
+          <Text color="white" fontSize="subheading" fontWeight="bold">Open in GitHub</Text>
+        </Pressable>
+      }
     </View>
   );
 };

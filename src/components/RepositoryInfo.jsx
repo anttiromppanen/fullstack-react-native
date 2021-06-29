@@ -11,15 +11,16 @@ const style = StyleSheet.create({
     color: theme.colors.primary,
   },
   icon: {
-    color: 'grey',
+    color: theme.colors.textSecondary,
     marginTop: 3,
   },
 });
 
-const RepositoryInfo = ({ text, amount, icon = faStar}) => {
+// icon = faStar
+const RepositoryInfo = ({ text, amount, testID, icon = faStar }) => {
   return (
     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-      <Text fontWeight="bold" fontSize="subheading">{amount}</Text>
+      <Text fontWeight="bold" fontSize="subheading" testID={testID}>{amount}</Text>
       <Text>{text}</Text>
       <FontAwesomeIcon style={style.icon} icon={icon} />
     </View>

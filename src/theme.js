@@ -3,18 +3,21 @@ import { Platform } from 'react-native';
 const theme = {
   colors: {
     textPrimary: '#24292e',
-    textSecondary: '#586069',
-    primary: '#0366d6',
-    errorColor: '#d73a4a',
+    textSecondary: '#A8AABC',
+    primary: '#00BB82',
+    yellow: '#FFC25E',
+    lightBrown: '#B6A999',
+    errorColor: '#C2554F',
     appBackgroundColor: 'lightgrey',
-    appBarBackground: 'black',
+    appBarBackground: '#504538',
     appBarPrimaryTextColor: 'white',
     repositoryItemBackgroundColor: 'white',
   },
   fontSizes: {
     body: 14,
+    heading: 45,
     subheading: 16,
-    appBarTextSize: 24,
+    appBarTextSize: 20,
   },
   fonts: {
     main: Platform.select({
@@ -30,6 +33,46 @@ const theme = {
   borderRadius: {
     round: 10,
     semiRound: 5,
+  },
+  container: {
+    backgroundColor: 'white',
+    padding: 20,
+  },
+  formStyle: {
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    height: '100%',
+    padding: 10,
+  },
+  formHeadingText: {
+    color: '#504538',
+    marginBottom: 10,
+    alignSelf: 'center',
+  },
+  formSubmitButton: {
+    marginTop: 10,
+    padding: 15,
+    backgroundColor: '#00BB82',
+    borderRadius: 5,
+  },
+  formSubmitButtonText: {
+    color: 'white',
+    textAlign: 'center',
+  },
+  formTextInput: {
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    borderColor: 'lightgrey',
+    borderWidth: 1,
+    flex: 1,
+    flexBasis: '90%',
+    margin: 5,
+    padding: 10,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    fontSize: 18,
+  },
+  formIcon: {
+    color: '#504538',
+    marginHorizontal: 5,
   },
 };
 
